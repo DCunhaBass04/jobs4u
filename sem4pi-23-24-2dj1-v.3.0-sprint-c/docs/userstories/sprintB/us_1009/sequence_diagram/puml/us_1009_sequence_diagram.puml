@@ -1,0 +1,87 @@
+@startuml
+
+actor "Customer Manager" as customermanager
+participant "SelectJobOpeningRequirementsUI" as UI
+participant "SelectJobOpeningRequirementsController" as CTRL
+participant Jobs4uUserAuthService as Service
+database JobOpeningRepository as JobOpeningRepository
+database JobRequirementsRepository as RequirementsRepository
+participant JobOpening as JobOpening
+
+title US1009 - Selecting a Job Requirement Specifications to be used
+
+activate customermanager
+
+customermanager -> UI : requests to select a Job Requirement Specifications for a Job Opening
+activate UI
+
+UI -> CTRL**: create
+UI -> CTRL: findJobOpeningsByCustomerManagerWithoutJobRequirement()
+activate CTRL
+
+CTRL -> Service** : create instance
+
+CTRL -> Service : authenticatedUser().getEmail().toString()
+activate Service
+Service --> CTRL : current customer manager email (String)
+deactivate Service
+
+CTRL -> JobOpeningRepository**: create instance
+CTRL -> JobOpeningRepository: findJobOpeningsOfCustomerManagerWOJobRequirements(email)
+activate JobOpeningRepository
+JobOpeningRepository --> CTRL : List<JobOpening>
+deactivate JobOpeningRepository
+CTRL --> UI : List<JobOpening>
+deactivate CTRL
+
+
+alt if they have any job openings without job requirements
+
+UI --> customermanager : lists job openings without job requirements
+customermanager -> UI : picks one
+
+UI -> CTRL: findJobRequirements()
+activate CTRL
+
+CTRL -> RequirementsRepository**: create instance
+CTRL -> RequirementsRepository: findAll()
+activate RequirementsRepository
+RequirementsRepository --> CTRL : List<JobRequirements>
+deactivate RequirementsRepository
+CTRL --> UI : List<JobRequirements>
+deactivate CTRL
+
+alt if there are any job requirements registered in the system
+
+UI --> customermanager : lists job requirements specifications
+
+customermanager -> UI : picks one
+
+UI -> CTRL :saveJobOpeningWithRequirement(jobOpening, jobRequirements)
+activate CTRL
+
+CTRL -> JobOpening : setJobRequirements(jobRequirements)
+activate JobOpening
+deactivate JobOpening
+
+CTRL -> JobOpeningRepository : save(jobOpening)
+activate JobOpeningRepository
+deactivate JobOpeningRepository
+
+CTRL --> UI
+deactivate CTRL
+
+UI --> customermanager : informs user of operation success
+
+end if
+
+end if
+deactivate UI
+
+
+
+@enduml
+
+
+
+

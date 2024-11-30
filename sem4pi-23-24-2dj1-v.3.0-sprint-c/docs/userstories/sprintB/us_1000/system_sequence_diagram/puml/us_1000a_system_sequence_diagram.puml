@@ -1,0 +1,54 @@
+@startuml
+actor Admin as Actor
+participant System as SYS
+
+title US 1000a - Registering users in the backoffice
+
+activate Actor
+
+Actor -> SYS : requests to register a user
+
+activate SYS
+
+group do while (!validRole)
+
+SYS --> Actor : asks to select role
+
+Actor -> SYS : selects role
+
+note right
+
+loops until a valid role is chosen
+
+end note
+
+end
+
+SYS --> Actor : asks for username
+
+Actor -> SYS : provides username
+
+group do while (!registrationSuccessful)
+
+SYS --> Actor : asks for password
+
+note right
+
+Loops until the registration is successful. Errors and mistakes will restart the loop.
+
+end note
+
+
+Actor -> SYS : provides password
+
+SYS --> Actor : asks for email
+
+Actor -> SYS : provides email
+
+SYS --> Actor : registers the user
+
+deactivate SYS
+
+end
+
+@enduml

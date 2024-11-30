@@ -1,0 +1,35 @@
+@startuml
+actor Admin as Actor
+participant System as SYS
+
+
+title US 1000b - Toggling user status in the backoffice
+
+
+activate Actor
+
+Actor -> SYS : requests to toggle a user's status
+
+activate SYS
+
+SYS --> Actor : shows backoffice users
+
+SYS --> Actor : asks for the user's email
+
+Actor -> SYS : provides the email
+
+SYS --> Actor : toggles the user's status
+
+deactivate SYS
+
+
+
+
+
+
+
+
+
+
+
+@enduml

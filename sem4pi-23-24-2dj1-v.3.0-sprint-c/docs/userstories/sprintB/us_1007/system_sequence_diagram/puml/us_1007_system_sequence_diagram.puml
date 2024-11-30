@@ -1,0 +1,75 @@
+@startuml
+actor "Customer Manager" as User
+participant System as SYS
+
+title US 1007 - Setting up Recruitment Phases
+
+
+
+activate User
+
+User -> SYS : requests to setup the recruitment phases for a job opening
+
+activate SYS
+
+alt if there are job openings that meet that requirement
+
+SYS --> User : lists their job openings that don't have their recruitment phases set up
+
+User -> SYS : selects the job opening
+
+loop if inserted close date is before start date
+
+SYS --> User : asks for start and close date for the Application phase
+
+User -> SYS : provides start and end date
+
+end loop
+
+loop if inserted close date is before start date
+
+SYS --> User : asks for start and close date for the Screening phase
+
+User -> SYS : provides start and end date
+
+end loop
+
+SYS --> User : asks if job opening will have Interviews phase
+
+User -> SYS : answers y/n
+
+alt if job opening has Interviews phase
+
+loop if inserted close date is before start date
+
+SYS --> User : asks for start and close date for the Interviews phase
+
+User -> SYS : provides start and end date
+
+end loop
+
+end alt
+
+loop if inserted close date is before start date
+
+SYS --> User : asks for start and close date for the Analysis phase
+
+User -> SYS : provides start and end date
+
+end loop
+
+loop if inserted close date is before start date
+
+SYS --> User : asks for start and close date for the Result phase
+
+User -> SYS : provides start and end date
+
+end loop
+
+SYS --> User : informs user of operation success
+
+end alt
+
+deactivate SYS
+
+@enduml

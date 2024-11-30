@@ -1,0 +1,35 @@
+@startuml
+actor Operator as Actor
+participant System as SYS
+
+
+title US 2000b - Toggling candidate status
+
+
+activate Actor
+
+Actor -> SYS : requests to toggle a candidate's status
+
+activate SYS
+
+SYS --> Actor : shows candidates
+
+SYS --> Actor : asks for the candidate's email
+
+Actor -> SYS : provides the email
+
+SYS --> Actor : toggles the candidate's status
+
+deactivate SYS
+
+
+
+
+
+
+
+
+
+
+
+@enduml

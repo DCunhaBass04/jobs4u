@@ -1,0 +1,36 @@
+@startuml
+
+actor "Customer Manager" as customermanager
+participant "System" as System
+
+activate customermanager
+
+activate customermanager
+
+customermanager -> System : requests to list a job opening
+activate System
+System --> customermanager : asks to filter by customer
+alt yes
+customermanager -> System : accepts filtering by customer
+
+System --> customermanager : asks to select a customer
+customermanager -> System : selects a customer
+
+System --> customermanager : displays all job openings of the selected customer
+
+end if
+
+alt no
+customermanager -> System : denies filtering by customer
+System --> customermanager : displays all job openings
+end if
+
+deactivate System
+
+
+
+@enduml
+
+
+
+

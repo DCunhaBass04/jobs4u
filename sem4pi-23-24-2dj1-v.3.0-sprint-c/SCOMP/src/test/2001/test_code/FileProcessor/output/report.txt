@@ -1,0 +1,43 @@
+Application number 5:
+--------------------------
+Output Directory: output/ISEP-000557/5
+Files Copied:
+5-big-file1.txt
+5-candidate-data.txt
+5-cv.txt
+5-email.txt
+5-letter.txt
+
+
+Application number 2:
+--------------------------
+Output Directory: output/IBM-000123/2
+Files Copied:
+2-candidate-data.txt
+2-cv.txt
+2-email.txt
+2-letter.txt
+
+
+Application number 1:
+--------------------------
+Output Directory: output/IBM-000123/1
+Files Copied:
+1-big-file-1.txt
+1-candidate-data.txt
+1-cv.txt
+1-email.txt
+1-report-1.txt
+
+
+Application number 10:
+--------------------------
+Output Directory: output/FEUP-112233/10
+Files Copied:
+10-big-file-1.txt
+10-candidate-data.txt
+10-cv.txt
+10-email.txt
+10-report-1.txt
+
+

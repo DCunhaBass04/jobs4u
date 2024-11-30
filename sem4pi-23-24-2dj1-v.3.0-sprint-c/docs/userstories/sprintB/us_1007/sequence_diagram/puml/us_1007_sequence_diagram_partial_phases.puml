@@ -1,0 +1,83 @@
+@startuml
+actor "Customer Manager" as User
+participant SetupJobOpeningRecuitmentPhasesUI as UI
+participant SetupJobOpeningRecuitmentPhasesController as CTRL
+
+title US 1007 - Setting up Recruitment Phases\nPartial - Phases
+
+activate User
+activate UI
+
+alt if there are job openings that meet that requirement
+
+loop if inserted close date is before start date
+
+UI --> User : asks for start and close date for the Application phase
+
+User -> UI : provides start and end date
+
+end loop
+
+UI -> CTRL : insertApplicationPhase(phase)
+activate CTRL
+deactivate CTRL
+
+loop if inserted close date is before start date
+
+UI --> User : asks for start and close date for the Screening phase
+
+User -> UI : provides start and end date
+
+end loop
+
+UI -> CTRL : insertScreeningPhase(phase)
+activate CTRL
+deactivate CTRL
+
+UI --> User : asks if job opening will have Interviews phase
+
+User -> UI : answers y/n
+
+alt if job opening has Interviews phase
+
+loop if inserted close date is before start date
+
+UI --> User : asks for start and close date for the Interviews phase
+
+User -> UI : provides start and end date
+
+end loop
+
+UI -> CTRL : insertInterviewsPhase(phase)
+activate CTRL
+deactivate CTRL
+
+end alt
+
+loop if inserted close date is before start date
+
+UI --> User : asks for start and close date for the Analysis phase
+
+User -> UI : provides start and end date
+
+end loop
+
+User -> CTRL : insertAnalysisPhase(phase)
+activate CTRL
+deactivate CTRL
+
+loop if inserted close date is before start date
+
+UI --> User : asks for start and close date for the Result phase
+
+User -> UI : provides start and end date
+
+end loop
+
+UI -> CTRL : insertResultPhase(phase)
+activate CTRL
+deactivate CTRL
+
+end alt
+
+@enduml

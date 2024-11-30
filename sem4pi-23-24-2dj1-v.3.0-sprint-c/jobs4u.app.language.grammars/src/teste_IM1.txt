@@ -1,0 +1,6 @@
+# ISEP was founded in the year 1910 (true/false)
+Founding-year: false
+# Select one degree (None; Bachelor; Master; PhD)
+Academic-degree: Master
+# Select one or more programming languages you are proficient in (Java; C#; PHP; Javascript; Typescript)
+Programming-languages: Javascript, Typescript

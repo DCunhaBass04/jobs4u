@@ -1,0 +1,118 @@
+@startuml
+actor Admin as Actor
+participant RegisterBackofficeUserUI as UI
+participant RegisterBackofficeUserController as CTRLR
+participant Jobs4uUserManagementService as Service
+participant Username
+participant Password
+participant Email
+participant Jobs4uUser as User
+participant Jobs4uUserRepository as Repository
+
+title US 1000a - Registering users in the backoffice
+
+activate Actor
+
+Actor -> UI : requests to register a user
+
+activate UI
+
+Create CTRLR
+
+UI -> CTRLR : create
+
+group do while (!validRole)
+
+UI --> Actor : asks to select role
+
+Actor -> UI : selects role
+
+note right
+
+loops until a valid role is chosen
+
+end note
+
+end
+
+UI --> Actor : asks for username
+
+Actor -> UI : provides username
+
+group do while (!registrationSuccessful)
+
+UI --> Actor : asks for password
+
+note right
+
+Loops until the registration is successful. Errors and mistakes will restart the loop.
+
+end note
+
+Actor -> UI : provides password
+
+UI --> Actor : asks for email
+
+Actor -> UI : provides email
+
+UI -> CTRLR : registerUser(role, username, password, email)
+
+activate CTRLR
+
+create Service
+
+CTRLR -> Service : create
+
+CTRLR -> Service : registerCustomerManager(rawUsername, rawPassword, rawEmail, isEnabled)
+
+note top
+
+There is a switch case for each available role.
+
+end note
+
+activate Service
+
+create Username
+
+Service -> Username : create
+
+create Password
+
+Service -> Password : create
+
+create Email
+
+Service -> Email: create
+
+create User
+
+Service -> User : create
+
+create Repository
+
+Service -> Repository : create
+
+Service -> Repository : save(user)
+
+activate Repository
+
+Repository --> Service
+
+deactivate Repository
+
+Service --> CTRLR
+
+deactivate Service
+
+CTRLR --> UI
+
+deactivate CTRLR
+
+UI --> Actor : registers the user
+
+deactivate UI
+
+end
+
+@enduml

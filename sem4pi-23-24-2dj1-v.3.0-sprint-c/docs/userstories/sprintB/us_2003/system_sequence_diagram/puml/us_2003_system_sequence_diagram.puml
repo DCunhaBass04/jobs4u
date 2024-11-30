@@ -1,0 +1,25 @@
+@startuml
+actor Operator as User
+participant System as SYS
+
+title US 2003 - Generating a template file for data collection
+
+
+
+activate User
+
+User -> SYS : requests to generate and export the template text file
+
+activate SYS
+
+SYS --> User : shows list of pluggins
+
+SYS --> User : asks to select a job requirements pluggin
+
+User -> SYS : selects the pluggin
+
+SYS --> User : exports the file
+
+deactivate SYS
+
+@enduml

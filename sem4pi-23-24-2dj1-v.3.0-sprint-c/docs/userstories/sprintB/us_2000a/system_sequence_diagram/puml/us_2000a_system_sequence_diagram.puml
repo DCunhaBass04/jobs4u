@@ -1,0 +1,42 @@
+@startuml
+
+actor Operator as Actor
+participant System as SYS
+
+title US 2000a - Registering candidates
+
+activate Actor
+
+Actor -> SYS : requests to register a candidate
+
+activate SYS
+
+SYS --> Actor : asks for username
+
+Actor -> SYS : provides username
+
+SYS --> Actor : asks for password
+
+Actor -> SYS : provides password
+
+SYS --> Actor : asks for email
+
+Actor -> SYS : provides email
+
+SYS --> Actor : asks for first name
+
+Actor -> SYS : provides first name
+
+SYS --> Actor : asks for last name
+
+Actor -> SYS : provides last name
+
+SYS --> Actor : asks for phone number
+
+Actor -> SYS : provides phone number
+
+SYS --> Actor : register the candidate
+
+deactivate SYS
+
+@enduml

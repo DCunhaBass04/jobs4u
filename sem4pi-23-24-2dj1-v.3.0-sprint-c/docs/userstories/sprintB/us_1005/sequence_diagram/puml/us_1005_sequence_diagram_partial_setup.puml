@@ -1,0 +1,48 @@
+@startuml
+actor "Customer Manager" as User
+participant ListJobOpeningApplicationsUI as UI
+participant ListJobOpeningApplicationsController as CTRL
+participant Jobs4uUserAuthService as Service
+database CustomerRepository as CustomerRepository
+
+title US 1005 - Listing applications for a job opening\nPartial - Setup
+
+activate User
+
+User -> UI : requests to list job applications for a job opening
+
+activate UI
+
+UI --> User : asks if user wants to filter by customer
+
+User -> UI : answers
+
+alt if answer was yes
+
+UI -> CTRL**: create
+UI -> CTRL: findCustomersFromCustomerManager()
+activate CTRL
+
+CTRL -> Service** : create instance
+
+CTRL -> Service : authenticatedUser().getEmail().toString()
+activate Service
+Service --> CTRL : current customer manager email (String)
+deactivate Service
+
+CTRL -> CustomerRepository**: create instance
+CTRL -> CustomerRepository: findCustomersByCustomerManagerEmail(email)
+activate CustomerRepository
+CustomerRepository --> CTRL : List<Customer>
+deactivate CustomerRepository
+CTRL --> UI : List<Customer>
+deactivate CTRL
+
+UI --> User : lists customers
+
+User -> UI : picks a customer
+
+end
+
+
+@enduml

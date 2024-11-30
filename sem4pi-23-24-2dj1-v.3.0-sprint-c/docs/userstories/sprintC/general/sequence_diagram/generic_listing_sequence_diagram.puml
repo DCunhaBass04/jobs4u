@@ -1,0 +1,57 @@
+@startuml
+actor Actor
+participant UI
+participant Controller
+participant Repository
+
+title Generic listing sequence diagram
+
+activate Actor
+
+Actor -> UI : requests to list x
+
+activate UI
+
+Create Controller
+
+UI -> Controller : create
+
+UI -> Controller : getX();
+
+activate Controller
+
+create Repository
+
+Controller -> Repository : create
+
+Controller -> Repository : x()
+
+activate Repository
+
+Repository --> Controller : x
+
+deactivate Repository
+
+Controller --> UI : x
+
+deactivate Controller
+
+UI --> Actor : shows list
+
+deactivate UI
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@enduml

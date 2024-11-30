@@ -1,0 +1,43 @@
+@startuml
+actor "Customer Manager" as User
+participant System as SYS
+
+title US 1005 - Listing applications for a job opening
+
+
+
+activate User
+
+User -> SYS : requests to list job applications for a job opening
+
+activate SYS
+
+SYS --> User : asks if user wants to filter by customer
+
+User -> SYS : answers
+
+alt if answer was yes
+
+SYS --> User : lists customers
+
+User -> SYS : picks a customer
+
+end
+
+alt if there are job openings that belong\nto the current Customer Manager
+
+SYS --> User : lists their job openings
+
+User -> SYS : selects the job opening
+
+alt if there are job applications for that job opening
+
+SYS --> User : lists the job applications
+
+end alt
+
+end alt
+
+deactivate SYS
+
+@enduml

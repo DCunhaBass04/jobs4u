@@ -1,0 +1,44 @@
+@startuml
+
+actor "Customer Manager" as customermanager
+participant "System" as System
+
+activate customermanager
+
+activate customermanager
+
+customermanager -> System : requests to register a job opening
+activate System
+System --> customermanager : Request to select and customer
+customermanager -> System : Selects customer
+
+Loop all parameters follow bussines and system rules
+
+System --> customermanager : Request job designation
+customermanager -> System : Provides a designation
+System --> customermanager : asks to select a contract type
+customermanager -> System : selects a contractType
+System --> customermanager : asks to select a contract jobMode
+customermanager -> System : selects a jobMode
+System --> customermanager : asks to select an address
+customermanager -> System : selects an address
+System --> customermanager : asks to enter a numberOfVacancies
+customermanager -> System : enters number Of Vacancies
+alt if all paremeters follow bussiness and system rules
+System --> customermanager : Display success message
+
+end loop
+
+
+
+end
+
+deactivate System
+
+
+
+@enduml
+
+
+
+

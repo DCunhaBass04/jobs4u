@@ -1,0 +1,45 @@
+@startuml
+actor "Customer Manager" as User
+participant System as SYS
+
+
+title US 1013 - Ranking candidates' applications
+
+
+activate User
+
+User -> SYS : requests to rank the candidates for a job opening
+
+activate SYS
+
+group do while(!verificationSuccessful)
+
+SYS --> User : asks to select a job opening
+
+User -> SYS : selects a job opening
+
+end
+
+group repeats for the number calculated through the number of vacancies or (if lesser) the number of candidates
+
+group do while(!verificationSuccessful)
+
+SYS --> User : asks to select a candidate for the current position
+
+User -> SYS : selects a candidate
+
+note right
+
+loops until a valid candidate is chosen (valid candidates haven't been ranked yet.)
+
+end note
+
+end
+
+SYS --> User : ranks the candidate
+
+end
+
+deactivate SYS
+
+@enduml

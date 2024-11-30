@@ -1,0 +1,93 @@
+@startuml
+
+actor CustomerManager as actor
+participant "RegisterJobOpeningUI" as UI
+participant "RegisterJobOpeningController" as Controller
+database "CustomerRepository" as CustRepo
+database "JobOpeningRepository" as JobRepo
+
+
+activate actor
+actor -> UI : requests to register a job opening
+
+
+activate UI
+create Controller
+UI -> Controller : create
+
+activate Controller
+create CustRepo
+Controller -> CustRepo: create
+create JobRepo
+
+Controller -> JobRepo : create
+
+deactivate Controller
+
+
+UI --> actor : Asks to select an existent customer
+
+actor -> UI : Selects and existing customer
+Loop all parameters follow bussines and system rules
+
+
+UI -> Controller : findCustomerFromCustomerManager
+activate Controller
+Controller -> CustRepo : findCustomerFromCustomerManager
+activate CustRepo
+
+
+
+deactivate CustRepo
+
+
+deactivate Controller
+UI --> actor : Request job designation
+actor -> UI : Provides a designation
+
+
+UI --> actor : asks to select a contract type
+actor -> UI : selects a contractType
+
+UI --> actor : asks to select a contract jobMode
+actor -> UI : selects a jobMode
+
+UI --> actor : asks to select a address
+actor -> UI : selects a address
+
+UI --> actor : asks to enter a numberOfVacancies
+actor -> UI :  enters number Of Vacancies
+
+
+UI -> Controller : registerJobOpening(designation, contractType, jobMode, address, vacancies, customer)
+activate Controller
+note right
+Job Opening is created first.
+Then customer is updated because its number of Job Openings increments.
+
+end note
+
+Controller -> CustRepo : save(Customer)
+
+activate CustRepo
+CustRepo --> Controller : Customer saved
+deactivate CustRepo
+Controller -> JobRepo : save(JobOpening)
+activate JobRepo
+JobRepo --> Controller : Job Opening saved
+deactivate JobRepo
+
+
+
+Controller -> UI:
+deactivate Controller
+deactivate CustRepo
+
+UI --> actor : Display success message
+
+
+
+deactivate UI
+
+end if
+@enduml

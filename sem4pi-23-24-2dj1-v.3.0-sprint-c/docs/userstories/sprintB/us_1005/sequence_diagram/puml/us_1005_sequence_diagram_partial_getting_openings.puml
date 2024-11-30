@@ -1,0 +1,57 @@
+@startuml
+participant ListJobOpeningApplicationsUI as UI
+participant ListJobOpeningApplicationsController as CTRL
+participant Jobs4uUserAuthService as Service
+database JobOpeningRepository as JobOpeningRepository
+
+title US 1005 - Listing applications for a job opening\nPartial - Finding Openings
+
+activate UI
+
+alt if answer was yes
+
+UI -> CTRL: findJobOpeningFromCustomerManagerByCustomer(customer)
+activate CTRL
+
+CTRL -> Service : authenticatedUser().getEmail().toString()
+activate Service
+Service --> CTRL : current customer manager email (String)
+deactivate Service
+
+CTRL -> JobOpeningRepository** : create instance
+
+CTRL -> JobOpeningRepository : findJobOpeningsOfCustomerManagerFromCustomer(email, customer)
+activate JobOpeningRepository
+
+
+JobOpeningRepository --> CTRL : List<JobOpening>
+deactivate JobOpeningRepository
+
+CTRL --> UI : List<JobOpening>
+deactivate CTRL
+
+else otherwise
+
+UI -> CTRL: findJobOpeningFromCustomerManager()
+activate CTRL
+
+CTRL -> Service : authenticatedUser().getEmail().toString()
+activate Service
+Service --> CTRL : current customer manager email (String)
+deactivate Service
+
+CTRL -> JobOpeningRepository** : create instance
+
+CTRL -> JobOpeningRepository : findJobOpeningsOfCustomerManager(email)
+activate JobOpeningRepository
+
+
+JobOpeningRepository --> CTRL : List<JobOpening>
+deactivate JobOpeningRepository
+
+CTRL --> UI : List<JobOpening>
+deactivate CTRL
+
+end if
+
+@enduml

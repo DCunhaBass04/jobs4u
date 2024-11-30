@@ -1,0 +1,81 @@
+@startuml
+actor "Customer Manager" as User
+participant DisplayCandidatePersonalDataUI as UI
+participant DisplayCandidatePersonalDataController as CTRLR
+participant CandidateRepository as Repository
+participant Candidate
+participant Name
+
+title US 1006 - Displaying a candidate's data
+
+
+activate User
+
+User -> UI : requests to display a candidate's details
+
+activate UI
+
+create CTRLR
+
+UI -> CTRLR : create
+
+UI -> CTRLR : getCandidates()
+
+activate CTRLR
+
+create Repository
+
+CTRLR -> Repository : create
+
+CTRLR -> Repository : findAll()
+
+activate Repository
+
+Repository --> CTRLR : candidates
+
+deactivate Repository
+
+CTRLR --> UI : candidates
+
+deactivate CTRLR
+
+UI --> User : shows candidate list
+
+UI --> User : asks to type the candidate's first name
+
+User -> UI : provides first name
+
+UI --> User : asks to type the candidate's last name
+
+User -> UI : provides last name
+
+create Candidate
+
+UI -> Candidate : create
+
+UI -> CTRLR : getCandidateByName(firstName,lastName)
+
+activate CTRLR
+
+create Name
+
+CTRLR -> Name : create
+
+CTRLR -> Repository : findCandidateByName(name)
+
+activate Repository
+
+Repository --> CTRLR : candidate
+
+deactivate Repository
+
+CTRLR --> UI : candidate
+
+deactivate CTRLR
+
+UI --> User : displays the candidate's data
+
+deactivate UI
+
+
+@enduml

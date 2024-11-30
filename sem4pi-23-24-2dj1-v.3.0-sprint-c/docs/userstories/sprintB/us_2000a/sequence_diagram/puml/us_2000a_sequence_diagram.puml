@@ -1,0 +1,134 @@
+@startuml
+
+actor Operator as Actor
+participant RegisterCandidateUI as UI 
+participant RegisterCandidateController as CTRLR 
+participant Username 
+participant Password 
+participant Email
+participant FirstName 
+participant LastName 
+participant PhoneNumber
+participant CandidateRepository as Repository
+
+title US 2000a - Registering candidates 
+
+activate Actor
+
+Actor -> UI : requests to register a candidate
+
+activate UI
+
+Create CTRLR
+
+UI -> CTRLR : create
+
+UI -> UI : doShow()
+
+activate UI
+
+UI --> Actor : asks for username
+
+Actor -> UI : provides username
+
+UI --> Actor : asks for password
+
+Actor -> UI : provides password
+
+UI --> Actor : asks for email
+
+Actor -> UI : provides email
+
+UI --> Actor : asks for first name
+
+Actor -> UI : provides first name
+
+UI --> Actor : asks for last name
+
+Actor -> UI : provides last name
+
+UI --> Actor : asks for phone number
+
+Actor -> UI : provides phone number
+
+UI --> Actor : register the candidate
+
+UI -> CTRLR : registerCandidate(username, password, email, firstName, lastName, phoneNumber)
+
+
+activate CTRLR
+
+activate Username
+
+CTRLR -> Username : create
+
+create Password
+
+CTRLR -> Password : create
+
+create Email
+
+CTRLR -> Email : create
+
+create FirstName
+
+CTRLR -> FirstName : create
+
+create LastName
+
+CTRLR -> LastName : create
+
+create PhoneNumber
+
+CTRLR -> PhoneNumber : create
+
+create Repository
+
+CTRLR -> Repository : create
+
+CTRLR -> Repository : save(candidate)
+
+activate Repository
+
+Repository --> CTRLR
+
+deactivate Repository
+
+CTRLR --> UI
+
+deactivate CTRLR
+
+UI --> UI : false
+
+deactivate UI
+
+UI --> Actor : registers the candidate
+
+deactivate UI
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@enduml

@@ -1,0 +1,209 @@
+@startuml
+actor "Customer Manager" as Manager
+participant RankCandidatesUI as UI
+participant RankCandidatesController as CTRLR
+
+title US 1013 - Ranking candidates' applications
+
+activate Manager
+
+Manager -> UI : requests to rank the candidates
+
+activate UI
+
+create CTRLR
+
+UI -> CTRLR : create
+
+UI -> CTRLR : findAllCustomerManagerJobOpenings()
+
+activate CTRLR
+
+CTRLR -> Jobs4uUserAuthService : authenticatedUser()
+
+activate Jobs4uUserAuthService
+
+Jobs4uUserAuthService -> Jobs4uUser : getEmail()
+
+activate Jobs4uUser
+
+Jobs4uUser --> Jobs4uUserAuthService : email
+
+deactivate Jobs4uUser
+
+Jobs4uUserAuthService --> CTRLR : email
+
+deactivate Jobs4uUserAuthService
+
+CTRLR -> JobOpeningRepository : findJobOpeningsOfCustomerManager(email)
+
+activate JobOpeningRepository
+
+JobOpeningRepository --> CTRLR : jobOpeningList
+
+deactivate JobOpeningRepository
+
+CTRLR --> UI : jobOpeningList
+
+deactivate CTRLR
+
+group do while(!verificationSuccessful)
+
+UI --> Manager : asks to select a job opening
+
+Manager -> UI : selects a job opening
+
+note right
+
+loops until a valid job opening is chosen
+
+end note
+
+end
+
+UI -> CTRLR : findJobOpening(jobOpeningReference)
+
+activate CTRLR
+
+CTRLR -> JobOpeningRepository : findByJobReference(JobReference.valueOf(jobOpeningReference))
+
+activate JobOpeningRepository
+
+JobOpeningRepository --> CTRLR : jobOpening
+
+deactivate JobOpeningRepository
+
+CTRLR --> UI : jobOpening
+
+deactivate CTRLR
+
+UI --> CTRLR : getApplicationList(jobOpening)
+
+activate CTRLR
+
+CTRLR -> JobApplicationRepository : findJobApplicationsByJobOpening(jobOpening)
+
+activate JobApplicationRepository
+
+JobApplicationRepository --> CTRLR : jobApplicationList
+
+deactivate JobApplicationRepository
+
+CTRLR --> UI : jobApplicationList
+
+deactivate CTRLR
+
+UI -> UI : numberOfRankings(jobApplications)
+
+activate UI
+
+UI -> JobApplication : getJobOpening()
+
+activate JobApplication
+
+JobApplication --> UI : jobOpening
+
+deactivate JobApplication
+
+UI -> JobOpening : getNumberOfVacancies()
+
+activate JobOpening
+
+JobOpening --> UI : vancancies
+
+deactivate JobOpening
+
+UI -> Vacancies : getNumberOfVacancies()
+
+activate Vacancies
+
+Vacancies --> UI : vancancies
+
+deactivate Vacancies
+
+UI --> UI : MULTIPLIER*vancancies
+
+note right
+
+The multiplier is an arbitrarily chosen number
+
+end note
+
+deactivate UI
+
+group repeats for the number calculated through the number of vacancies or (if lesser) the number of candidates
+
+group do while(!verificationSuccessful)
+
+UI --> Manager : asks to select a candidate for the current position
+
+Manager -> UI : selects a candidate
+
+note right
+
+loops until a valid candidate is chosen (valid candidates haven't been ranked yet.)
+
+end note
+
+end
+
+UI -> CTRLR : rankApplication(jobOpening, jobApplication, position)
+
+activate CTRLR
+
+create Rank
+
+CTRLR -> Rank : create
+
+CTRLR -> JobOpening : getRankList()
+
+activate JobOpening
+
+JobOpening --> CTRLR : rankList
+
+note right
+
+After obtaining the rankList, the Rank created by the controller is added to it.
+
+end note
+
+deactivate JobOpening
+
+CTRLR -> JobOpening : setRankList(rankList)
+
+activate JobOpening
+
+JobOpening --> CTRLR
+
+deactivate JobOpening
+
+CTRLR -> JobOpeningRepository : save(jobOpening)
+
+activate JobOpeningRepository
+
+JobOpeningRepository --> CTRLR
+
+deactivate JobOpeningRepository
+
+CTRLR --> UI
+
+deactivate CTRLR
+
+UI --> Manager : ranks the candidate
+
+deactivate UI
+
+end
+
+
+
+
+@enduml
+
+
+
+
+
+
+
+

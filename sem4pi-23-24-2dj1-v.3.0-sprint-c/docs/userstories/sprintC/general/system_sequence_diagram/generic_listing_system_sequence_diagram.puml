@@ -1,0 +1,33 @@
+@startuml
+actor Admin as Actor
+participant System as SYS
+
+title Generic listing sequence diagram
+
+activate Actor
+
+Actor -> SYS : requests to list x
+
+activate SYS
+
+
+SYS --> Actor : shows list of x
+
+
+deactivate SYS
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@enduml

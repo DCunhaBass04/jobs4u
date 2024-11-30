@@ -1,0 +1,118 @@
+@startuml
+actor "Customer Manager" as Manager
+participant UploadInterviewAnswersUI as UI
+participant UploadInterviewAnswersController as CTRLR
+
+title US 1017 - Uploading Interview Answers
+
+activate Manager
+
+Manager -> UI : requests to upload a text file with the\n candidate responses for an interview
+
+activate UI
+
+create CTRLR
+
+UI -> CTRLR : create
+
+group do while(!verificationSuccessful)
+
+UI --> Manager : asks to select a job opening
+
+Manager -> UI : selects a job opening
+
+note right
+
+loops until a valid job opening is chosen
+
+end note
+
+end
+
+group do while(!verificationSuccessful)
+
+UI --> Manager : asks to select a job application
+
+Manager -> UI : selects application
+
+note right
+
+loops until a valid job application is chosen
+
+end note
+
+end
+
+UI --> Manager : asks to select a file for uploading
+
+Manager -> UI : selects a file
+
+UI -> CTRLR : uploadFile(fileName, jobApplication)
+
+activate CTRLR
+
+CTRLR -> JobApplication : getInterview()
+
+activate JobApplication
+
+JobApplication --> CTRLR : interview
+
+deactivate JobApplication
+
+CTRLR -> Interview : getInterviewAnswers()
+
+activate Interview
+
+Interview --> CTRLR : interviewAnswers
+
+deactivate Interview
+
+CTRLR -> InterviewAnswers : setInterviewAnswers(content)
+
+activate InterviewAnswers
+
+InterviewAnswers --> CTRLR
+
+deactivate InterviewAnswers
+
+CTRLR -> Interview : setInterviewAnswers(interviewAnswers)
+
+activate Interview
+
+Interview --> CTRLR
+
+deactivate Interview
+
+CTRLR -> JobApplication : setInterview(interview)
+
+activate JobApplication
+
+JobApplication --> CTRLR
+
+deactivate JobApplication
+
+CTRLR -> JobApplicationRepository : save(jobApplication)
+
+activate JobApplicationRepository
+
+JobApplicationRepository --> CTRLR
+
+deactivate JobApplicationRepository
+
+CTRLR --> UI
+
+deactivate CTRLR
+
+UI --> Manager : uploads the text file
+
+deactivate UI
+
+@enduml
+
+
+
+
+
+
+
+

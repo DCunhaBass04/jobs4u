@@ -1,0 +1,84 @@
+@startuml
+actor "Customer Manager" as Manager
+participant PublishResultsUI as UI
+participant PublishResultsController as CTRLR
+
+title US 1020 - Results publication
+
+activate Manager
+
+Manager -> UI : requests to publish results
+
+activate UI
+
+create CTRLR
+
+UI -> CTRLR : create
+
+group do while(!verificationSuccessful)
+
+UI --> Manager : asks to select a job opening
+
+Manager -> UI : selects a job opening
+
+note right
+
+loops until a valid job opening is chosen
+
+end note
+
+end
+
+UI -> CTRLR : getResults(jobOpening)
+
+activate CTRLR
+
+CTRLR -> JobOpening : getRankList()
+
+activate JobOpening
+
+JobOpening --> CTRLR : rankList
+
+deactivate JobOpening
+
+CTRLR -> JobOpening : getNumberOfVacancies()
+
+activate JobOpening
+
+JobOpening --> CTRLR : numberOfVacancies
+
+deactivate JobOpening
+
+CTRLR -> Vacancies : getNumberOfVacancies()
+
+activate Vacancies
+
+Vacancies --> CTRLR : numberOfVacancies
+
+deactivate Vacancies
+
+CTRLR --> UI : results
+
+deactivate CTRLR
+
+UI -> CTRLR : publishResults(results)
+
+activate CTRLR
+
+CTRLR --> UI
+
+deactivate CTRLR
+
+UI --> Manager : publishes results
+
+deactivate UI
+
+@enduml
+
+
+
+
+
+
+
+

@@ -1,0 +1,53 @@
+@startuml
+actor "Customer Manager" as User
+participant SetupJobOpeningRecuitmentPhasesUI as UI
+participant SetupJobOpeningRecuitmentPhasesController as CTRL
+participant Jobs4uUserAuthService as Service
+database JobOpeningRepository as Repository
+participant JobOpening as Object
+
+title US 1007 - Setting up Recruitment Phases\nPartial - Setup
+
+activate User
+
+User -> UI : requests to setup the recruitment phases for a job opening
+
+activate UI
+
+UI -> CTRL** : create
+
+UI -> CTRL : findCustomerManagerJobOpeningsNoRecruitmentProcess()
+activate CTRL
+
+CTRL -> Service** : create instance
+
+CTRL -> Service : authenticatedUser().getEmail().toString()
+activate Service
+Service --> CTRL : current customer manager email (String)
+deactivate Service
+
+CTRL -> Repository** : create instance
+
+CTRL -> Repository : findJobOpeningsOfCustomerManagerNoRecruitmentProcess(email)
+activate Repository
+
+Repository -> Object**
+Repository -> Object : get list of
+activate Object
+deactivate Object
+
+Repository --> CTRL : List<JobOpening>
+deactivate Repository
+
+CTRL --> UI : List<JobOpening>
+deactivate CTRL
+
+alt if there are job openings that meet that requirement
+
+UI --> User : lists their job openings that don't have their recruitment phases set up
+
+User -> UI : selects the job opening
+
+end alt
+
+@enduml

@@ -1,0 +1,35 @@
+@startuml
+actor "Customer Manager" as User
+participant SetupJobOpeningRecuitmentPhasesUI as UI
+participant SetupJobOpeningRecuitmentPhasesController as CTRL
+participant Jobs4uUserAuthService as Service
+database JobOpeningRepository as Repository
+participant JobOpening as Object
+
+title US 1007 - Setting up Recruitment Phases\nPartial - Finale
+
+activate User
+activate UI
+
+alt if there are job openings\nthat meet that requirement
+
+UI -> CTRL : updateJobOpening(jobOpening)
+activate CTRL
+
+CTRL -> Object : defineRecruitmentProcess(phases)
+activate Object
+deactivate Object
+
+CTRL -> Repository : save(jobOpening)
+activate Repository
+deactivate Repository
+CTRL --> UI
+deactivate CTRL
+
+UI --> User : informs user of operation success
+
+end alt
+
+deactivate UI
+
+@enduml

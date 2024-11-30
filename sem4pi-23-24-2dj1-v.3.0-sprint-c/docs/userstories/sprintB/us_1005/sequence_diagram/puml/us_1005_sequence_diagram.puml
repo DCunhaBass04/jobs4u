@@ -1,0 +1,121 @@
+@startuml
+actor "Customer Manager" as User
+participant ListJobOpeningApplicationsUI as UI
+participant ListJobOpeningApplicationsController as CTRL
+participant Jobs4uUserAuthService as Service
+database CustomerRepository as CustomerRepository
+database JobOpeningRepository as JobOpeningRepository
+database JobApplicationRepository as ApplicationRepository
+
+title US 1005 - Listing applications for a job opening
+
+activate User
+
+User -> UI : requests to list job applications for a job opening
+
+activate UI
+
+UI --> User : asks if user wants to filter by customer
+
+User -> UI : answers
+
+alt if answer was yes
+
+UI -> CTRL**: create
+UI -> CTRL: findCustomersFromCustomerManager()
+activate CTRL
+
+CTRL -> Service** : create instance
+
+CTRL -> Service : authenticatedUser().getEmail().toString()
+activate Service
+Service --> CTRL : current customer manager email (String)
+deactivate Service
+
+CTRL -> CustomerRepository**: create instance
+CTRL -> CustomerRepository: findCustomersByCustomerManagerEmail(email)
+activate CustomerRepository
+CustomerRepository --> CTRL : List<Customer>
+deactivate CustomerRepository
+CTRL --> UI : List<Customer>
+deactivate CTRL
+
+UI --> User : lists customers
+
+User -> UI : picks a customer
+
+UI -> CTRL: findJobOpeningFromCustomerManagerByCustomer(customer)
+activate CTRL
+
+CTRL -> Service : authenticatedUser().getEmail().toString()
+activate Service
+Service --> CTRL : current customer manager email (String)
+deactivate Service
+
+CTRL -> JobOpeningRepository** : create instance
+
+CTRL -> JobOpeningRepository : findJobOpeningsOfCustomerManagerFromCustomer(email, customer)
+activate JobOpeningRepository
+
+
+JobOpeningRepository --> CTRL : List<JobOpening>
+deactivate JobOpeningRepository
+
+CTRL --> UI : List<JobOpening>
+deactivate CTRL
+
+else otherwise
+
+UI -> CTRL: findJobOpeningFromCustomerManager()
+activate CTRL
+
+CTRL -> Service : authenticatedUser().getEmail().toString()
+activate Service
+Service --> CTRL : current customer manager email (String)
+deactivate Service
+
+CTRL -> JobOpeningRepository** : create instance
+
+CTRL -> JobOpeningRepository : findJobOpeningsOfCustomerManager(email)
+activate JobOpeningRepository
+
+
+JobOpeningRepository --> CTRL : List<JobOpening>
+deactivate JobOpeningRepository
+
+CTRL --> UI : List<JobOpening>
+deactivate CTRL
+
+end if
+
+alt if there are job openings that belong\nto the current Customer Manager
+
+UI --> User : lists their job openings
+
+User -> UI : selects the job opening
+
+UI -> CTRL: findJobApplicationsByJobOpening(jobOpening)
+activate CTRL
+
+CTRL -> ApplicationRepository** : create instance
+
+CTRL -> ApplicationRepository : findJobApplicationsByJobOpening(jobOpening)
+activate ApplicationRepository
+
+ApplicationRepository --> CTRL : List<JobApplication>
+deactivate ApplicationRepository
+
+CTRL --> UI : List<JobApplication>
+deactivate CTRL
+
+alt if there are job applications for that job opening
+
+UI --> User : lists the job applications
+
+end alt
+
+end alt
+
+deactivate UI
+
+@enduml

@@ -1,0 +1,36 @@
+@startuml
+
+actor "Customer Manager" as customermanager
+participant "System" as System
+
+title US1009 - Selecting a Job Requirement Specifications to be used
+
+activate customermanager
+
+customermanager -> System : requests to select a Job Requirement Specifications for a Job Opening
+activate System
+alt if they have any job openings without job requirements
+
+System --> customermanager : lists job openings without job requirements
+customermanager -> System : picks one
+
+alt if there are any job requirements registered in the system
+
+System --> customermanager : lists job requirements specifications
+
+customermanager -> System : picks one
+
+System --> customermanager : informs user of operation success
+
+end if
+
+end if
+deactivate System
+
+
+
+@enduml
+
+
+
+

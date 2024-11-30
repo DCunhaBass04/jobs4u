@@ -1,0 +1,8 @@
+{
+    "editor.lineHeight": 0,
+    "editor.renderLineHighlight": "none",
+    "editor.guides.indentation": false,
+    "editor.guides.bracketPairs": false,
+    "editor.occurrencesHighlight": "off",
+    "scm.diffDecorations": "none"
+}

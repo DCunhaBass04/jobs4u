@@ -1,0 +1,55 @@
+@startuml
+actor Operator as User
+participant ExportRequirementsTemplateFileUI as UI
+participant ExportRequirementsTemplateFileController as CTRLR
+participant JobRequirements
+
+title US 2003 - Generating a template file for data collection
+
+
+
+activate User
+
+User -> UI : requests to generate and export the template text file
+
+activate UI
+
+create CTRLR
+
+UI -> CTRLR : create
+
+UI -> CTRLR : getJobRequirements()
+
+activate CTRLR
+
+CTRLR --> UI : jobRequirementsList
+
+deactivate CTRLR
+
+UI --> User : shows list of pluggins
+
+UI --> User : asks to select a job requirements pluggin
+
+User -> UI : selects the pluggin
+
+create JobRequirements
+
+UI -> JobRequirements : create
+
+UI -> CTRLR : usePluggin(jobRequirements)
+
+activate CTRLR
+
+CTRLR -> JobRequirements : getClassName()
+
+activate JobRequirements
+
+JobRequirements --> CTRLR : getClassName
+
+deactivate JobRequirements
+
+UI --> User : exports the file
+
+deactivate UI
+
+@enduml

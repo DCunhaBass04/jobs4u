@@ -1,0 +1,131 @@
+@startuml
+actor "Customer Manager" as User
+participant DisplayCandidateApplicationsUI as UI
+participant DisplayCandidatePersonalDataUI as PersonalDataUI
+participant DisplayCandidatePersonalDataController as PersonalDataCTRLR
+participant CandidateRepository
+participant Candidate
+participant Name
+
+participant DisplayCandidateApplicationsController as CTRLR
+participant JobApplicationRepository as Repository
+
+
+title US 1006b - Displaying a candidate's data and applications
+
+
+activate User
+
+User -> UI : requests to display a candidate's details
+
+activate UI
+
+create PersonalDataUI
+
+UI -> PersonalDataUI : create
+
+create CTRLR
+
+UI -> CTRLR : create
+
+UI -> PersonalDataUI : doShow()
+
+activate PersonalDataUI
+
+create PersonalDataCTRLR
+
+PersonalDataUI -> PersonalDataCTRLR : create
+
+PersonalDataUI -> PersonalDataCTRLR : getCandidates()
+
+activate PersonalDataCTRLR
+
+create CandidateRepository
+
+PersonalDataCTRLR -> CandidateRepository : create
+
+PersonalDataCTRLR -> CandidateRepository : findAll()
+
+activate CandidateRepository
+
+CandidateRepository --> PersonalDataCTRLR : candidates
+
+deactivate CandidateRepository
+
+PersonalDataCTRLR --> PersonalDataUI : candidates
+
+deactivate PersonalDataCTRLR
+
+PersonalDataUI --> User : shows candidate list
+
+PersonalDataUI --> User : asks to type the candidate's first name
+
+User -> PersonalDataUI : provides first name
+
+PersonalDataUI --> User : asks to type the candidate's last name
+
+User -> PersonalDataUI : provides last name
+
+create Candidate
+
+PersonalDataUI -> Candidate : create
+
+PersonalDataUI -> PersonalDataCTRLR : getCandidateByName(firstName,lastName)
+
+activate PersonalDataCTRLR
+
+create Name
+
+PersonalDataCTRLR -> Name : create
+
+PersonalDataCTRLR -> CandidateRepository : findCandidateByName(name)
+
+activate CandidateRepository
+
+CandidateRepository --> PersonalDataCTRLR : candidate
+
+deactivate CandidateRepository
+
+PersonalDataCTRLR --> PersonalDataUI : candidate
+
+deactivate PersonalDataCTRLR
+
+PersonalDataUI --> User : displays the candidate's data
+
+PersonalDataUI --> UI : false
+
+deactivate PersonalDataUI
+
+UI -> PersonalDataUI : getCandidate()
+
+activate PersonalDataUI
+
+PersonalDataUI --> UI : candidate
+
+deactivate PersonalDataUI
+
+UI -> CTRLR : findApplicationsByCandidate(candidate)
+
+activate CTRLR
+
+create Repository
+
+CTRLR -> Repository : create
+
+CTRLR -> Repository : findJobApplicationByCandidate(candidate)
+
+activate Repository
+
+Repository --> CTRLR : jobApplications
+
+deactivate Repository
+
+CTRLR --> UI : jobApplications
+
+deactivate CTRLR
+
+UI --> User : displays the candidate's applications
+
+deactivate UI
+
+@enduml

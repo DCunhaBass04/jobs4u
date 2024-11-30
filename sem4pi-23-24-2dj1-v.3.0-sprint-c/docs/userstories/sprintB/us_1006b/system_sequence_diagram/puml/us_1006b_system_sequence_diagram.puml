@@ -1,0 +1,31 @@
+@startuml
+actor "Customer Manager" as User
+participant System as SYS
+
+
+title US 1006b - Displaying a candidate's data and applications
+
+
+activate User
+
+User -> SYS : requests to display a candidate's details
+
+activate SYS
+
+SYS --> User : shows candidate list
+
+SYS --> User : asks to type the candidate's first name
+
+User -> SYS : provides first name
+
+SYS --> User : asks to type the candidate's last name
+
+User -> SYS : provides last name
+
+SYS --> User : displays the candidate's data
+
+SYS --> User : displays the candidate's applications
+
+deactivate SYS
+
+@enduml

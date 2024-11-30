@@ -1,0 +1,94 @@
+@startuml
+actor Admin as Actor
+participant DisableBackofficeUserUI as UI
+participant DisableBackofficeUserController as CTRLR
+participant Jobs4uUserRepository as Repository
+participant Jobs4uUser as User
+
+title US 1000b - Toggling user status in the backoffice
+
+activate Actor
+
+Actor -> UI : requests to toggle a user's status
+
+activate UI
+
+create CTRLR
+
+UI -> CTRLR : create
+
+UI --> Actor : shows backoffice users
+
+UI --> Actor : asks for the user's email
+
+group do while (!verificationUnsuccessful)
+
+Actor -> UI : provides the email
+
+UI -> CTRLR : emailIsSatisfiedBy(email)
+
+note left
+
+validates the email
+
+end note
+
+activate CTRLR
+
+CTRLR --> UI
+
+end
+
+deactivate CTRLR
+
+UI -> CTRLR : findUserAndToggleStatus(email)
+
+activate CTRLR
+
+create Repository
+
+CTRLR -> Repository : create
+
+CTRLR -> Repository : findJobs4uUserByEmail(email)
+
+activate Repository
+
+Repository --> CTRLR : user
+
+deactivate Repository
+
+CTRLR -> CTRLR : toggleUserStatus(user)
+
+activate CTRLR
+
+CTRLR -> User : toggleStatus()
+
+activate User
+
+User --> CTRLR
+
+deactivate User
+
+CTRLR -> Repository : save(user)
+
+activate Repository
+
+Repository --> CTRLR
+
+deactivate Repository
+
+CTRLR --> CTRLR
+
+deactivate CTRLR
+
+CTRLR --> UI
+
+deactivate CTRLR
+
+UI --> Actor : toggles the user's status
+
+deactivate UI
+
+
+
+@enduml

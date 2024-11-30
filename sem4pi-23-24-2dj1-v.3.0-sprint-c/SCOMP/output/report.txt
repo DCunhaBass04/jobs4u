@@ -1,0 +1,33 @@
+Application number 2:
+--------------------------
+Output Directory: ../../../output/IBM-0/2
+Files Copied:
+2-big-file1.txt
+2-candidate-data.txt
+2-cv.txt
+2-email.txt
+2-letter.txt
+
+
+Application number 1:
+--------------------------
+Output Directory: ../../../output/IBM-0/1
+Files Copied:
+1-big-file-1.txt
+1-candidate-data.txt
+1-cv.txt
+1-email.txt
+1-report-1.txt
+
+
+Application number 5:
+--------------------------
+Output Directory: ../../../output/ISEP-0/5
+Files Copied:
+5-big-file1.txt
+5-candidate-data.txt
+5-cv.txt
+5-email.txt
+5-letter.txt
+
+

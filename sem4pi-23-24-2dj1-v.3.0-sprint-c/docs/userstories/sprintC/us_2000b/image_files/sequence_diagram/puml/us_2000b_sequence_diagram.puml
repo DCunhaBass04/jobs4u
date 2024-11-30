@@ -1,0 +1,102 @@
+@startuml
+actor Operator as Actor
+participant DisableCandidateUI as UI
+participant DisableCandidateController as CTRLR
+participant Jobs4uUserRepository as UserRepository
+participant Jobs4uUser as User
+
+title US 2000b - Toggling candidate status
+
+activate Actor
+
+Actor -> UI : requests to toggle a candidate's status
+
+activate UI
+
+create CTRLR
+
+UI -> CTRLR : create
+
+UI --> Actor : shows candidates
+
+UI --> Actor : asks for the candidate's email
+
+group do while (!verificationUnsuccessful)
+
+Actor -> UI : provides the email
+
+UI -> CTRLR : emailIsSatisfiedBy(email)
+
+note left
+
+validates the email
+
+end note
+
+activate CTRLR
+
+CTRLR --> UI
+
+deactivate CTRLR
+
+UI -> CTRLR : emailIsOfACandidate(email)
+
+activate CTRLR
+
+CTRLR --> UI
+
+deactivate CTRLR
+
+end
+
+UI -> CTRLR : findCandidateAndToggleStatus(email)
+
+activate CTRLR
+
+create UserRepository
+
+CTRLR -> UserRepository : create
+
+CTRLR -> UserRepository : findUserByEmail(email)
+
+activate UserRepository
+
+UserRepository --> CTRLR : user
+
+deactivate UserRepository
+
+CTRLR -> CTRLR : toggleUserStatus(user)
+
+activate CTRLR
+
+CTRLR -> User : toggleStatus()
+
+activate User
+
+User --> CTRLR
+
+deactivate User
+
+CTRLR -> UserRepository : save(user)
+
+activate UserRepository
+
+UserRepository --> CTRLR
+
+deactivate UserRepository
+
+CTRLR --> CTRLR
+
+deactivate CTRLR
+
+CTRLR --> UI
+
+deactivate CTRLR
+
+UI --> Actor : toggles the candidate's status
+
+deactivate UI
+
+
+
+@enduml

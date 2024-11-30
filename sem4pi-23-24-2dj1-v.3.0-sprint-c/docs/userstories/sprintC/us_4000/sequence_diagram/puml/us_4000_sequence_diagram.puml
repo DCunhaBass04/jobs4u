@@ -1,0 +1,89 @@
+@startuml
+
+actor "Customer Manager" as customermanager
+participant "DisplayCandidateApplicationsUI" as UI
+participant "DisplayCandidateApplicationsController" as CTRL
+participant JobApplication as Application
+participant WordQueue as Queue
+participant WordCounter as Thread
+participant FileAnalyzer as FileReader
+
+title US4000 - Sequence Diagram
+
+activate customermanager
+activate UI
+
+loop for every application
+
+UI -> CTRL: createListOfTopWords(application)
+activate CTRL
+
+note left
+ After preparing to display all
+ Applications of a Candidate
+end note
+
+CTRL -> Application: createListOfWords()
+activate Application
+
+Application -> Queue**: create
+loop the number of files
+Application -> Thread**: createThread(queue, fileName)
+Application -> Thread: run()
+
+
+activate Thread
+Thread -> FileReader: getContentFromFile(fileName)
+activate FileReader
+FileReader --> Thread: contentFromFile
+deactivate FileReader
+
+Thread --> Application
+note right
+ Now, each thread will
+ count the words from their file.
+
+ For each word, will call the
+ WordQueue's "addWord" method
+
+ That method checks if the
+ word is already on the queue:
+ * If yes, increment the number of
+ occurrences of that word (and adds
+ the name of the file if it's the first
+ time that file has that word)
+ * If no, add it to the queue.
+end note
+deactivate Thread
+end loop
+
+Application -> Queue: getSortedListOfMostUsedWords()
+activate Queue
+Queue --> Application: list of words (sorted in descending order\nof occurrences, only showing the first 20)
+deactivate Queue
+note right
+This happens after the Application
+object waits for each Thread to end,
+ensuring that no progress is disregarded
+end note
+
+Application --> CTRL: list of words
+deactivate Application
+
+CTRL --> UI: list of words
+deactivate CTRL
+
+end loop
+
+loop for every application
+UI --> customermanager: display application along with\nlist of words and their number of\noccurrences and list of files\nwhere each one appears in
+end loop
+deactivate UI
+
+
+
+@enduml
+
+
+
+

@@ -1,0 +1,20 @@
+#Ignore all without extension
+*
+       
+#Do not ignore all with extensions
+!*.*
+
+#Do not ignore all directories
+!*/
+
+#Ignore temp files
+*~ 
+*.swp
+.DS_Store
+
+#Ignore geany script
+geany_run_script.sh
+
+#Ignore object files
+*.o
+/sprintB/diagrama/.$diagrama.drawio.bkp
